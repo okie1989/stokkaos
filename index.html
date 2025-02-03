@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STOK KAOS KANVAS MERCH</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script>
+    <style>
+        :root {
+            --primary: #7ddb91;
+            --secondary: #3e884a;
+            --light: #1f8171;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #8088aa;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--primary);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .header-title {
+            color: rgb(32, 17, 17);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Login Form */
+        .login-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1001;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 20px;
+            padding: 20px;
+        }
+
+        /* Input Form */
+        .compact-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        /* Table Style */
+        .stock-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .stock-table th,
+        .stock-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #3a2121;
+        }
+
+        .stock-table th {
+            background-color: var(--primary);
+            color: rgb(51, 27, 27);
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .low-stock {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+    
+    <!-- Firebase Config -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAmSWqMZ4Nrc4905V8EEB83oJs0IB0EATQ",
+            authDomain: "stok-kaos.firebaseapp.com",
+            databaseURL: "https://stok-kaos-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "stok-kaos",
+            storageBucket: "stok-kaos.firebasestorage.app",
+            messagingSenderId: "423425283384",
+            appId: "1:423425283384:web:a6bb4aafa22a6daaac1dcd"
+        };
+        
+        const app = firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore(app);
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <img src="https://i.imgur.com/75tlt7m.png" class="logo" alt="Logo">
+        <h1 class="header-title">STOK KAOS KANVAS MERCH</h1>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginContainer" class="login-container">
+        <input type="text" id="username" class="login-input" placeholder="Username" value="admin">
+        <input type="password" id="password" class="login-input" placeholder="Password">
+        <button onclick="login()" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Login</button>
+    </div>
+
+    <!-- Public Stock Table -->
+    <div class="container">
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>Warna</th>
+                    <th>Size</th>
+                    <th>Varian</th>
+                    <th>Lengan</th>
+                    <th>Gramasi</th>
+                    <th>Model</th>
+                    <th>Jenis Bahan</th>
+                    <th>Jumlah</th>
+                </tr>
+            </thead>
+            <tbody id="publicStockBody"></tbody>
+        </table>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="container hidden" id="adminContent">
+        <!-- Admin Stock Table -->
+        <table class="stock-table">
+            <thead>
+                <tr>
+                    <th>Warna</th>
+                    <th>Size</th>
+                    <th>Varian</th>
+                    <th>Lengan</th>
+                    <th>Gramasi</th>
+                    <th>Model</th>
+                    <th>Jenis Bahan</th>
+                    <th>Jumlah</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="adminStockBody"></tbody>
+        </table>
+
+        <!-- Compact Input Form -->
+        <div class="compact-form" style="margin-top: 20px;">
+            <select id="warna">
+                <option value="Putih">Putih</option>
+            <option value="Broken White">Broken White</option>
+            <option value="Abu Muda">Abu Muda</option>
+            <option value="Abu Sedang">Abu Sedang</option>
+            <option value="Abu Tua">Abu Tua</option>
+            <option value="Hitam Reaktif">Hitam Reaktif</option>
+            <option value="Hitam Sulfur">Hitam Sulfur</option>
+            <option value="Hitam Supersoft">Hitam Supersoft</option>
+            <option value="Charcoal">Charcoal</option>
+            <option value="Navy">Navy</option>
+            <option value="Hijau Botol">Hijau Botol</option>
+            <option value="Hijau Pucuk">Hijau Pucuk</option>
+            <option value="Army">Army</option>
+            <option value="Sage">Sage</option>
+            <option value="Biru Langit">Biru Langit</option>
+            <option value="Biru Elektrik">Biru Elektrik</option>
+            <option value="Biru Dongker">Biru Dongker</option>
+            <option value="Kuning Lemon">Kuning Lemon</option>
+            <option value="Kuning Mustard">Kuning Mustard</option>
+            <option value="Oranye">Oranye</option>
+            <option value="Salmon">Salmon</option>
+            <option value="Merah Cabe">Merah Cabe</option>
+            <option value="Merah Marun">Merah Marun</option>
+            <option value="Coklat Tua">Coklat Tua</option>
+            <option value="Coklat Muda">Coklat Muda</option>
+            <option value="Pink Muda">Pink Muda</option>
+            <option value="Dusty Pink">Dusty Pink</option>
+            <option value="Ungu Muda">Ungu Muda</option>
+            <option value="Ungu Lavender">Ungu Lavender</option>
+            <option value="Toska Muda">Toska Muda</option>
+            <option value="Mint">Mint</option>
+        </select>
+            
+        <select id="size">
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="2XL">2XL</option>
+            <option value="3XL">3XL</option>
+            <option value="4XL">4XL</option>
+            <option value="5XL">5XL</option>
+            <option value="6XL">6XL</option>
+        </select>
+
+        <select id="varian">
+            <option value="DEWASA">Dewasa</option>
+            <option value="ANAK">Anak</option>
+        </select>
+
+        <select id="lengan">
+            <option value="PENDEK">Pendek</option>
+            <option value="PANJANG">Panjang</option>
+            <option value="PANJANG RIB">Panjang Rib</option>
+        </select>
+
+            <select id="gramasi">
+                <option value="30S">30S</option>
+            <option value="24S">24S</option>
+            <option value="20S">20S</option>
+            <option value="16S">16S</option>
+        </select>
+
+            <select id="model">
+            <option value="OBLONG">Oblong</option>
+            <option value="V-NECK">V-Neck</option>
+            <option value="KERAH">Kerah</option>
+            <option value="RAGLAN">Raglan</option>
+            <option value="SINGLET">Singlet</option>
+        </select>
+           .
+            <select id="jenisBahan">
+                <option value="COMBED">Combed</option>
+            <option value="CARDED">Carded</option>
+            <option value="PE">PE</option>
+            <option value="TC">TC</option>
+            <option value="LACOS">Lacos</option>
+        </select>
+
+            <input type="number" id="jumlah" placeholder="Jumlah">
+            <button onclick="addStock()" class="btn btn-primary">Tambah Stok</button>
+        </div>
+    </div>
+
+<script>
+    let isAdmin = false;
+
+    // Fungsi Login
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (username === 'admin' && password === 'knvs1234') {
+            isAdmin = true;
+            document.getElementById('loginContainer').classList.add('hidden');
+            document.querySelector('.container:not(#adminContent)').classList.add('hidden');
+            document.getElementById('adminContent').classList.remove('hidden');
+            loadStocks();
+        } else {
+            alert('Login gagal!');
+        }
+    }
+
+    // Fungsi Tambah Stok
+    async function addStock() {
+        const stockData = {
+            warna: document.getElementById('warna').value,
+            size: document.getElementById('size').value,
+            varian: document.getElementById('varian').value,
+            lengan: document.getElementById('lengan').value,
+            gramasi: document.getElementById('gramasi').value,
+            model: document.getElementById('model').value,
+            jenisBahan: document.getElementById('jenisBahan').value,
+            jumlah: parseInt(document.getElementById('jumlah').value)
+        };
+
+        try {
+            await db.collection('stocks').add(stockData);
+            document.getElementById('jumlah').value = '';
+        } catch (error) {
+            console.error("Error adding document: ", error);
+        }
+    }
+
+    // Fungsi Muat Stok
+    function loadStocks() {
+        db.collection('stocks').onSnapshot((snapshot) => {
+            const publicBody = document.getElementById('publicStockBody');
+            const adminBody = document.getElementById('adminStockBody');
+            
+            publicBody.innerHTML = '';
+            adminBody.innerHTML = '';
+            
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                if(data.jumlah === 0) {
+                    db.collection('stocks').doc(doc.id).delete();
+                    return;
+                }
+
+                // Tampilkan untuk publik
+                const publicRow = publicBody.insertRow();
+                publicRow.innerHTML = `
+                    <td>${data.warna}</td>
+                    <td>${data.size}</td>
+                    <td>${data.varian}</td>
+                    <td>${data.lengan}</td>
+                    <td>${data.gramasi}</td>
+                    <td>${data.model}</td>
+                    <td>${data.jenisBahan}</td>
+                    <td class="${data.jumlah < 10 ? 'low-stock' : ''}">${data.jumlah}</td>
+                `;
+
+                // Tampilkan untuk admin
+                if(isAdmin) {
+                    const adminRow = adminBody.insertRow();
+                    adminRow.innerHTML = `
+                        <td>${data.warna}</td>
+                        <td>${data.size}</td>
+                        <td>${data.varian}</td>
+                        <td>${data.lengan}</td>
+                        <td>${data.gramasi}</td>
+                        <td>${data.model}</td>
+                        <td>${data.jenisBahan}</td>
+                        <td class="${data.jumlah < 10 ? 'low-stock' : ''}">${data.jumlah}</td>
+                        <td>
+                            <button class="btn btn-primary" 
+                                onclick="editStock('${doc.id}', ${data.jumlah})">
+                                Edit
+                            </button>
+                        </td>
+                    `;
+                }
+            });
+        });
+    }
+
+    // Fungsi Edit Stok
+    async function editStock(docId, currentQty) {
+        const newQty = prompt('Masukkan jumlah baru:', currentQty);
+        if(newQty !== null) {
+            try {
+                if(parseInt(newQty) === 0) {
+                    await db.collection('stocks').doc(docId).delete();
+                } else {
+                    await db.collection('stocks').doc(docId).update({
+                        jumlah: parseInt(newQty)
+                    });
+                }
+            } catch (error) {
+                console.error("Error updating document: ", error);
+            }
+        }
+    }
+
+    // Muat stok awal
+    loadStocks();
+</script>
+
+</body>
+</html>
