@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -511,25 +512,47 @@
 
     // Fungsi Tambah Stok
     async function addStock() {
-        const stockData = {
-            warna: document.getElementById('warna').value,
-            size: document.getElementById('size').value,
-            varian: document.getElementById('varian').value,
-            lengan: document.getElementById('lengan').value,
-            gramasi: document.getElementById('gramasi').value,
-            model: document.getElementById('model').value,
-            jenisBahan: document.getElementById('jenisBahan').value,
-            jumlah: parseInt(document.getElementById('jumlah').value)
-        };
+            const stockData = {
+                warna: document.getElementById('warna').value,
+                size: document.getElementById('size').value,
+                varian: document.getElementById('varian').value,
+                lengan: document.getElementById('lengan').value,
+                gramasi: document.getElementById('gramasi').value,
+                model: document.getElementById('model').value,
+                jenisBahan: document.getElementById('jenisBahan').value,
+                jumlah: parseInt(document.getElementById('jumlah').value)
+            };
 
-        try {
-            await db.collection('stocks').add(stockData);
-            document.getElementById('jumlah').value = '';
-            closeModal();
-        } catch (error) {
-            console.error("Error adding document: ", error);
+            try {
+                // Cek apakah stok dengan kriteria yang sama sudah ada
+                const querySnapshot = await db.collection('stocks')
+                    .where('warna', '==', stockData.warna)
+                    .where('size', '==', stockData.size)
+                    .where('varian', '==', stockData.varian)
+                    .where('lengan', '==', stockData.lengan)
+                    .where('gramasi', '==', stockData.gramasi)
+                    .where('model', '==', stockData.model)
+                    .where('jenisBahan', '==', stockData.jenisBahan)
+                    .get();
+
+                if (!querySnapshot.empty) {
+                    // Jika stok sudah ada, update jumlah stok
+                    const doc = querySnapshot.docs[0];
+                    const existingQty = doc.data().jumlah;
+                    await db.collection('stocks').doc(doc.id).update({
+                        jumlah: existingQty + stockData.jumlah
+                    });
+                } else {
+                    // Jika stok belum ada, tambahkan stok baru
+                    await db.collection('stocks').add(stockData);
+                }
+
+                document.getElementById('jumlah').value = '';
+                closeModal();
+            } catch (error) {
+                console.error("Error adding/updating document: ", error);
+            }
         }
-    }
 
     // Fungsi Muat Stok
     function loadStocks() {
