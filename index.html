@@ -1,3 +1,4 @@
+
 <!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STOK KAOS KANVAS MERCH</title><!-- Firebase SDK --><script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script><style>:root {
             --primary: #7ddb91;
             --secondary: #3e884a;
@@ -259,7 +260,144 @@
         };
         
         const app = firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore(app);</script></head><body><!-- Header --><div class="header"><img src="https://i.imgur.com/75tlt7m.png" class="logo" alt="Logo"><h1 class="header-title">STOK KAOS KANVAS MERCH</h1></div><!-- Login Button --> <button id="loginButton" class="login-button" onclick="openLoginModal()">Login</button><!-- Public Stock Table --><div class="container"><div class="search-container"><input type="text" id="searchInput" placeholder="Cari berdasarkan warna"> <button onclick="searchStock()" class="btn btn-primary">Cari</button></div><div class="table-wrapper"><table class="stock-table"><thead><tr><th>Warna</th><th>Size</th><th>Varian</th><th>Lengan</th><th>Gramasi</th><th>Model</th><th>Jenis Bahan</th><th>Jumlah</th></tr></thead><tbody id="publicStockBody"></tbody></table></div></div><!-- Admin Content --><div class="container hidden" id="adminContent"><!-- Button to Open Modal --> <button onclick="openModal()" class="btn btn-primary">Tambah Stok</button><!-- Admin Stock Table --><div class="table-wrapper"><table class="stock-table"><thead><tr><th>Warna</th><th>Size</th><th>Varian</th><th>Lengan</th><th>Gramasi</th><th>Model</th><th>Jenis Bahan</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody id="adminStockBody"></tbody></table></div></div><!-- Modal for Adding Stock --><div id="addStockModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeModal()">&times;</span><div class="modal-header">Tambah Stok</div><div class="compact-form"><select id="warna"><option value="HITAM SUPERSOFT">HITAM SUPERSOFT</option><option value="HITAM REAKTIF">HITAM REAKTIF</option><option value="HITAM SULFUR">HITAM SULFUR</option><option value="PUTIH BERSIH">PUTIH BERSIH</option><option value="PUTIH NATURAL">PUTIH NATURAL</option><option value="ARMY GREEN">ARMY GREEN</option><option value="HIJAU TNI">HIJAU TNI</option><option value="TOSCA TUA">TOSCA TUA</option><option value="BIRU TOSCA">BIRU TOSCA</option><option value="TOSCA">TOSCA</option><option value="TOSCA MUDA">TOSCA MUDA</option><option value="HIJAU MINT">HIJAU MINT</option><option value="HIJAU BOTOL">HIJAU BOTOL</option><option value="MINERAL GREEN">MINERAL GREEN</option><option value="OLIVE GREEN">OLIVE GREEN</option><option value="SAGE GREEN">SAGE GREEN</option><option value="HIJAU FUJI">HIJAU FUJI</option><option value="HIJAU PUCUK">HIJAU PUCUK</option><option value="ELECTRIC LIME">ELECTRIC LIME</option><option value="COKLAT KOPI">COKLAT KOPI</option><option value="COKLAT SUSU">COKLAT SUSU</option><option value="BEIGE">BEIGE</option><option value="KREM">KREM</option><option value="BENHUR">BENHUR</option><option value="TURKIS TUA">TURKIS TUA</option><option value="TURKIS">TURKIS</option><option value="TURKIS MUDA">TURKIS MUDA</option><option value="NAVY BLUE">NAVY BLUE</option><option value="ABU MISTY">ABU MISTY</option><option value="ABU TUA">ABU TUA</option><option value="ABU SEDANG">ABU SEDANG</option><option value="ABU MUDA">ABU MUDA</option><option value="STEEL BLUE">STEEL BLUE</option><option value="DUSTY BLUE">DUSTY BLUE</option><option value="SKY BLUE">SKY BLUE</option><option value="BIRU MUDA">BIRU MUDA</option><option value="UNGU TUA">UNGU TUA</option><option value="LAVENDER">LAVENDER</option><option value="LILAC">LILAC</option><option value="PINK FANTA">PINK FANTA</option><option value="MERAH CABE">MERAH CABE</option><option value="MERAH MARUN">MERAH MARUN</option><option value="BURGUNDY">BURGUNDY</option><option value="DUSTY ROSE">DUSTY ROSE</option><option value="DUSTY PINK">DUSTY PINK</option><option value="SALMON">SALMON</option><option value="DUSTY PEACH">DUSTY PEACH</option><option value="PINK">PINK</option><option value="MAGENTA">MAGENTA</option><option value="ORANGE BATA">ORANGE BATA</option><option value="ORANGE">ORANGE</option><option value="TOFFEE">TOFFEE</option><option value="ALMOND BROWN">ALMOND BROWN</option><option value="DARK MUSTARD">DARK MUSTARD</option><option value="MUSTARD">MUSTARD</option><option value="KUNING BUSUK">KUNING BUSUK</option><option value="KUNING EMAS">KUNING EMAS</option><option value="KUNING LEMON">KUNING LEMON</option><option value="KUNING KENARI">KUNING KENARI</option></select> <select id="size"><option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="2XL">2XL</option><option value="3XL">3XL</option><option value="4XL">4XL</option><option value="5XL">5XL</option><option value="6XL">6XL</option></select> <select id="varian"><option value="DEWASA">Dewasa</option><option value="ANAK">Anak</option></select> <select id="lengan"><option value="PENDEK">Pendek</option><option value="PANJANG">Panjang</option><option value="PANJANG RIB">Panjang Rib</option></select> <select id="gramasi"><option value="30S">30S</option><option value="24S">24S</option><option value="20S">20S</option><option value="16S">16S</option></select> <select id="model"><option value="OBLONG">Oblong</option><option value="V-NECK">V-Neck</option><option value="KERAH">Kerah</option><option value="RAGLAN">Raglan</option><option value="SINGLET">Singlet</option></select> <select id="jenisBahan"><option value="COMBED">Combed</option><option value="CARDED">Carded</option><option value="PE">PE</option><option value="TC">TC</option><option value="LACOS">Lacos</option></select> <input type="number" id="jumlah" placeholder="Jumlah"></div><div class="modal-footer"><button onclick="closeModal()" class="btn">Batal</button> <button onclick="addStock()" class="btn btn-primary">Simpan</button></div></div></div><!-- Login Modal --><div id="loginModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeLoginModal()">&times;</span><div class="modal-header">Login</div><div class="login-form"><input type="text" id="username" placeholder="Username" value="admin"> <input type="password" id="password" placeholder="Password"> <button onclick="login()" class="btn btn-primary">Login</button></div></div></div><script>let isAdmin = false;
+        db = firebase.firestore(app);</script></head><body>
+            
+            <!-- Header -->
+             <div class="header"><img src="https://i.imgur.com/75tlt7m.png" class="logo" alt="Logo">
+             <h1 class="header-title">STOK KAOS KANVAS MERCH</h1>
+             </div><!-- Login Button --> <button id="loginButton" class="login-button" onclick="openLoginModal()">Login</button>
+             
+             <!-- Public Stock Table -->
+              <div class="container"><div class="search-container">
+                <input type="text" id="searchInput" placeholder="Cari berdasarkan warna"> <button onclick="searchStock()" class="btn btn-primary">Cari</button></div>
+              <div class="table-wrapper"><table class="stock-table">
+                <thead><tr><th>Warna</th><th>Size</th><th>Varian</th><th>Lengan</th>
+                <th>Gramasi</th><th>Model</th><th>Jenis Bahan</th><th>Jumlah</th></tr>
+                </thead><tbody id="publicStockBody"></tbody></table></div></div>
+                
+                <!-- Admin Content -->
+                 
+                 <div class="container hidden" id="adminContent">
+                    
+                    <!-- Button to Open Modal --> 
+                     <button onclick="openModal()" class="btn btn-primary">Tambah Stok</button>
+                     
+                     <!-- Admin Stock Table --><div class="table-wrapper"><table class="stock-table">
+                        <thead><tr><th>Warna</th><th>Size</th><th>Varian</th><th>Lengan</th><th>Gramasi</th>
+                        <th>Model</th><th>Jenis Bahan</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody id="adminStockBody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                        
+                        <!-- Modal for Adding Stock -->
+                         <div id="addStockModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close-modal" onclick="closeModal()">&times;</span><div class="modal-header">Tambah Stok</div><div class="compact-form"><select id="warna">
+                                    <option value="HITAM SUPERSOFT">HITAM SUPERSOFT</option>
+                                    <option value="HITAM REAKTIF">HITAM REAKTIF</option>
+                                    <option value="HITAM SULFUR">HITAM SULFUR</option>
+                                    <option value="PUTIH BERSIH">PUTIH BERSIH</option>
+                                    <option value="PUTIH NATURAL">PUTIH NATURAL</option>
+                                    <option value="ARMY GREEN">ARMY GREEN</option>
+                                    <option value="HIJAU TNI">HIJAU TNI</option>
+                                    <option value="TOSCA TUA">TOSCA TUA</option>
+                                    <option value="BIRU TOSCA">BIRU TOSCA</option>
+                                    <option value="TOSCA">TOSCA</option>
+                                    <option value="TOSCA MUDA">TOSCA MUDA</option>
+                                    <option value="HIJAU MINT">HIJAU MINT</option>
+                                    <option value="HIJAU BOTOL">HIJAU BOTOL</option>
+                                    <option value="MINERAL GREEN">MINERAL GREEN</option>
+                                    <option value="OLIVE GREEN">OLIVE GREEN</option>
+                                    <option value="SAGE GREEN">SAGE GREEN</option>
+                                    <option value="HIJAU FUJI">HIJAU FUJI</option>
+                                    <option value="HIJAU PUCUK">HIJAU PUCUK</option>
+                                    <option value="ELECTRIC LIME">ELECTRIC LIME</option>
+                                    <option value="COKLAT KOPI">COKLAT KOPI</option>
+                                    <option value="COKLAT SUSU">COKLAT SUSU</option>
+                                    <option value="BEIGE">BEIGE</option>
+                                    <option value="KREM">KREM</option>
+                                    <option value="BENHUR">BENHUR</option>
+                                    <option value="TURKIS TUA">TURKIS TUA</option>
+                                    <option value="TURKIS">TURKIS</option>
+                                    <option value="TURKIS MUDA">TURKIS MUDA</option>
+                                    <option value="NAVY BLUE">NAVY BLUE</option>
+                                    <option value="ABU MISTY">ABU MISTY</option>
+                                    <option value="ABU TUA">ABU TUA</option>
+                                    <option value="ABU SEDANG">ABU SEDANG</option>
+                                    <option value="ABU MUDA">ABU MUDA</option>
+                                    <option value="STEEL BLUE">STEEL BLUE</option>
+                                    <option value="DUSTY BLUE">DUSTY BLUE</option>
+                                    <option value="DENIM BLUE BLUE">DENIM BLUE</option>
+                                    <option value="SKY BLUE">SKY BLUE</option>
+                                    <option value="BIRU MUDA">BIRU MUDA</option>
+                                    <option value="UNGU TUA">UNGU TUA</option>
+                                    <option value="LAVENDER">LAVENDER</option>
+                                    <option value="LILAC">LILAC</option>
+                                    <option value="PINK FANTA">PINK FANTA</option>
+                                    <option value="MERAH CABE">MERAH CABE</option>
+                                    <option value="MERAH MARUN">MERAH MARUN</option>
+                                    <option value="BURGUNDY">BURGUNDY</option>
+                                    <option value="DUSTY ROSE">DUSTY ROSE</option>
+                                    <option value="DUSTY PINK">DUSTY PINK</option>
+                                    <option value="SALMON">SALMON</option>
+                                    <option value="DUSTY PEACH">DUSTY PEACH</option>
+                                    <option value="PINK">PINK</option>
+                                    <option value="MAGENTA">MAGENTA</option>
+                                    <option value="ORANGE BATA">ORANGE BATA</option>
+                                    <option value="ORANGE">ORANGE</option>
+                                    <option value="TOFFEE">TOFFEE</option>
+                                    <option value="ALMOND BROWN">ALMOND BROWN</option>
+                                    <option value="DARK MUSTARD">DARK MUSTARD</option>
+                                    <option value="MUSTARD">MUSTARD</option>
+                                    <option value="KUNING BUSUK">KUNING BUSUK</option>
+                                    <option value="KUNING EMAS">KUNING EMAS</option>
+                                    <option value="KUNING LEMON">KUNING LEMON</option>
+                                    <option value="KUNING KENARI">KUNING KENARI</option>
+                                    </select> <select id="size">
+                                        <option value="XS">XS</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="2XL">2XL</option>
+                                        <option value="3XL">3XL</option>
+                                        <option value="4XL">4XL</option>
+                                        <option value="5XL">5XL</option>
+                                        <option value="6XL">6XL</option>
+                                        
+                                        </select> <select id="varian">
+                                            <option value="DEWASA">Dewasa</option>
+                                            <option value="ANAK">Anak</option>
+                                            
+                                            </select> <select id="lengan">
+                                                <option value="PENDEK">Pendek</option>
+                                                <option value="PANJANG">Panjang</option>
+                                                <option value="PANJANG RIB">Panjang Rib</option>
+                                                
+                                                </select> <select id="gramasi">
+                                                    <option value="30S">30S</option>
+                                                    <option value="24S">24S</option>
+                                                    <option value="20S">20S</option>
+                                                    <option value="16S">16S</option>
+                                                   
+                                                </select> <select id="model">
+                                                        <option value="OBLONG">Oblong</option>
+                                                        <option value="V-NECK">V-Neck</option>
+                                                        <option value="KERAH">Kerah</option>
+                                                        <option value="RAGLAN">Raglan</option>
+                                                        <option value="SINGLET">Singlet</option>
+                                                        
+                                                </select> <select id="jenisBahan">
+                                                    <option value="COMBED">Combed</option>
+                                                    <option value="CARDED">Carded</option>
+                                                    <option value="PE">PE</option>
+                                                    <option value="TC">TC</option>
+                                                    <option value="LACOS">Lacos</option>
+                                                    
+                                                </select> <input type="number" id="jumlah" placeholder="Jumlah">
+                                                </div><div class="modal-footer"><button onclick="closeModal()" class="btn">Batal</button> <button onclick="addStock()" class="btn btn-primary">Simpan</button></div></div></div><!-- Login Modal --><div id="loginModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeLoginModal()">&times;</span><div class="modal-header">Login</div><div class="login-form"><input type="text" id="username" placeholder="Username" value="admin"> <input type="password" id="password" placeholder="Password"> <button onclick="login()" class="btn btn-primary">Login</button></div></div></div><script>let isAdmin = false;
     let allStocks = [];
 
     // Fungsi Buka Login Modal
