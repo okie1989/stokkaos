@@ -1,586 +1,803 @@
 
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STOK KAOS KANVAS MERCH</title><!-- Firebase SDK --><script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script><style>:root {
-            --primary: #7ddb91;
-            --secondary: #3e884a;
-            --light: #1f8171;
-        }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            background-color: #8088aa;
-        }
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STOK KAOS KANVAS MERCH</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        
+        <!-- Firebase SDK -->
+         <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
+         <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script>
 
-        /* Header */
-        .header {
-            background-color: var(--primary);
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
+<style>
 
-        .logo {
-            height: 50px;
-            margin-right: 15px;
-        }
+:root {
+    --primary: #7ddb91;
+    --secondary: #3e884a;
+    --light: #1f8171;
+    --dark: #1a1a1a;
+    --background: #f4f4f4;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-        .header-title {
-            color: rgb(32, 17, 17);
-            font-size: 24px;
-            font-weight: bold;
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--background);
+    color: var(--dark);
+}
 
-        /* Login Button */
-        .login-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            background-color: var(--secondary);
-            color: white;
-            cursor: pointer;
-            z-index: 1001;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
+/* Header */
+.header {
+    background-color: var(--primary);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    animation: slideDown 0.5s ease-out;
+}
 
-        .login-button:hover {
-            background-color: var(--light);
-        }
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
 
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 100px auto 20px;
-            padding: 20px;
-        }
+.logo {
+    height: 50px;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+}
 
-        /* Search Container */
-        .search-container {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
+.logo:hover {
+    transform: scale(1.1);
+}
 
-        .search-container input {
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            flex: 1;
-        }
+.header-title {
+    color: var(--dark);
+    font-size: 24px;
+    font-weight: bold;
+}
 
-        .search-container button {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 4px;
-            background-color: var(--secondary);
-            color: white;
-            cursor: pointer;
-        }
+/* Login Button */
+.login-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--secondary);
+    color: white;
+    cursor: pointer;
+    z-index: 1001;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        /* Table Style */
-        .table-wrapper {
-            overflow-x: auto;
-        }
+.login-button:hover {
+    background-color: var(--light);
+    transform: translateY(-2px);
+}
 
-        .stock-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+.login-button i {
+    font-size: 16px;
+}
 
-        .stock-table th,
-        .stock-table td {
+/* Main Container */
+.container {
+    max-width: 1200px;
+    margin: 100px auto 20px;
+    padding: 20px;
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Search Container */
+.search-container {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.search-container input {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    flex: 1;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-container input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 5px rgba(125, 219, 145, 0.5);
+}
+
+.search-container button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--secondary);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-container button:hover {
+    background-color: var(--light);
+    transform: translateY(-2px);
+}
+
+/* Table Style */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    background: white;
+    padding: 10px;
+}
+
+.stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.stock-table th,
+.stock-table td {
     text-align: center;
-    border-bottom: 0px solid #3a2121;
-    overflow-wrap: anywhere;
-    text-size-adjust: 43%;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
 }
 
-        .stock-table th {
-            background-color: var(--primary);
-            color: rgb(51, 27, 27);
-        }
-
-        .btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-primary {
-            background-color: var(--secondary);
-            color: white;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .low-stock {
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .modal-header {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .close-modal {
-            cursor: pointer;
-            color: #aaa;
-            font-size: 24px;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-
-        .close-modal:hover {
-            color: #000;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .header-title {
-                font-size: 20px;
-            }
-
-            .login-button {
-                top: 15px;
-                right: 15px;
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .container {
-                margin-top: 80px;
-                padding: 10px;
-            }
-
-            .search-container {
-                flex-direction: column;
-            }
-
-            .search-container button {
-                width: 100%;
-            }
-
-            .stock-table th,
-            .stock-table td {
-    padding: 0;
-    font-size: 100%;
+.stock-table th {
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
 }
 
-            .btn {
-                padding: 4px 8px;
-                font-size: 14px;
-            }
-        }
+.stock-table tr:hover {
+    background-color: rgba(125, 219, 145, 0.1);
+}
 
-        @media (max-width: 390px) {
-            .header-title {
-                font-size: 18px;
-            }
+.btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-            .logo {
-                height: 40px;
-            }
+.btn-primary {
+    background-color: var(--secondary);
+    color: white;
+}
 
-            .login-button {
-                top: 10px;
-                right: 10px;
-                padding: 5px 10px;
-                font-size: 12px;
-            }
+.btn-primary:hover {
+    background-color: var(--light);
+    transform: translateY(-2px);
+}
 
-            .modal-content {
-                width: 95%;
-                padding: 15px;
-            }
+.hidden {
+    display: none;
+}
 
-            .modal-header {
-                font-size: 18px;
-            }
+.low-stock {
+    color: #e74c3c;
+    font-weight: bold;
+}
 
-            .modal-footer button {
-                padding: 6px 10px;
-            }
-        }</style><!-- Firebase Config --><script>const firebaseConfig = {
-            apiKey: "AIzaSyAmSWqMZ4Nrc4905V8EEB83oJs0IB0EATQ",
-            authDomain: "stok-kaos.firebaseapp.com",
-            databaseURL: "https://stok-kaos-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "stok-kaos",
-            storageBucket: "stok-kaos.firebasestorage.app",
-            messagingSenderId: "423425283384",
-            appId: "1:423425283384:web:a6bb4aafa22a6daaac1dcd"
-        };
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.close-modal {
+    cursor: pointer;
+    color: #aaa;
+    font-size: 24px;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--dark);
+}
+
+/* Summary Table */
+.summary-container {
+    margin-bottom: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table th,
+.summary-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.summary-table th {
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+}
+
+.summary-table tr:hover {
+    background-color: rgba(125, 219, 145, 0.1);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 20px;
+    }
+
+    .login-button {
+        top: 15px;
+        right: 15px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .container {
+        margin-top: 80px;
+        padding: 10px;
+    }
+
+    .search-container {
+        flex-direction: column;
+    }
+
+    .search-container button {
+        width: 100%;
+    }
+
+    .stock-table th,
+    .stock-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 390px) {
+    .header-title {
+        font-size: 18px;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    .login-button {
+        top: 10px;
+        right: 10px;
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .modal-header {
+        font-size: 18px;
+    }
+
+    .modal-footer button {
+        padding: 6px 10px;
+    }
+}
+
+</style>
+
+
+<!-- Firebase Config --><script>const firebaseConfig = {
+    apiKey: "AIzaSyAmSWqMZ4Nrc4905V8EEB83oJs0IB0EATQ",
+    authDomain: "stok-kaos.firebaseapp.com",
+    databaseURL: "https://stok-kaos-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "stok-kaos",
+    storageBucket: "stok-kaos.firebasestorage.app",
+    messagingSenderId: "423425283384",
+    appId: "1:423425283384:web:a6bb4aafa22a6daaac1dcd"
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+db = firebase.firestore(app);</script></head><body>
+    
+    <!-- Header -->
+     <div class="header"><img src="https://i.imgur.com/75tlt7m.png" class="logo" alt="Logo">
+     <h1 class="header-title">STOK KAOS KANVAS MERCH</h1>
+     </div>
+     
+     <!-- Login Button --> <button id="loginButton" class="login-button" onclick="openLoginModal()">Login</button>
+     
+     <!-- Public Stock Table -->
+      <div class="container"><div class="search-container">
+        <input type="text" id="searchInput" placeholder="Cari berdasarkan warna"> <button onclick="searchStock()" class="btn btn-primary">Cari</button></div>
+      <div class="table-wrapper"><table class="stock-table">
+        <thead><tr><th>Warna</th><th>Size</th><th>Varian</th><th>Lengan</th>
+        <th>Gramasi</th><th>Model</th><th>Jenis Bahan</th><th>Jumlah</th></tr>
+        </thead><tbody id="publicStockBody"></tbody></table></div></div>
         
-        const app = firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore(app);</script></head><body>
-            
-            <!-- Header -->
-             <div class="header"><img src="https://i.imgur.com/75tlt7m.png" class="logo" alt="Logo">
-             <h1 class="header-title">STOK KAOS KANVAS MERCH</h1>
-             </div><!-- Login Button --> <button id="loginButton" class="login-button" onclick="openLoginModal()">Login</button>
-             
-             <!-- Public Stock Table -->
-              <div class="container"><div class="search-container">
-                <input type="text" id="searchInput" placeholder="Cari berdasarkan warna"> <button onclick="searchStock()" class="btn btn-primary">Cari</button></div>
-              <div class="table-wrapper"><table class="stock-table">
-                <thead><tr><th>Warna</th><th>Size</th><th>Varian</th><th>Lengan</th>
-                <th>Gramasi</th><th>Model</th><th>Jenis Bahan</th><th>Jumlah</th></tr>
-                </thead><tbody id="publicStockBody"></tbody></table></div></div>
+        <!-- Admin Content -->
+    <div class="container hidden" id="adminContent">
+        <!-- Button to Open Modal -->
+        <button onclick="openModal()" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+        <!-- Back Button -->
+        <button onclick="backToPublic()" class="btn btn-secondary"><i class="fa fa-arrow-circle-left" aria-hidden="true"></i></button>
+
+        <!-- Summary Table -->
+        <div class="summary-container">
+            <h2>Ringkasan Stok</h2>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Total Stok</th>
+                        <th>Kaos Dewasa</th>
+                        <th>Kaos Anak</th>
+                        <th>Lengan Pendek</th>
+                        <th>Lengan Panjang</th>
+                        <th>30S</th>
+                        <th>24S</th>
+                    </tr>
+                </thead>
+                <tbody id="summaryBody">
+                    <tr>
+                        <td id="totalStock">0</td>
+                        <td id="adultStock">0</td>
+                        <td id="childStock">0</td>
+                        <td id="shortSleeveStock">0</td>
+                        <td id="longSleeveStock">0</td>
+                        <td id="stock30s">0</td>
+                        <td id="stock24s">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Admin Stock Table -->
+        <div class="table-wrapper">
+            <table class="stock-table">
+                <thead>
+                    <tr>
+                        <th>Warna</th>
+                        <th>Size</th>
+                        <th>Varian</th>
+                        <th>Lengan</th>
+                        <th>Gramasi</th>
+                        <th>Model</th>
+                        <th>Jenis Bahan</th>
+                        <th>Jumlah</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="adminStockBody"></tbody>
+            </table>
+        </div>
+    </div>
+
                 
-                <!-- Admin Content -->
-                 
-                 <div class="container hidden" id="adminContent">
-                    
-                    <!-- Button to Open Modal --> 
-                     <button onclick="openModal()" class="btn btn-primary">Tambah Stok</button>
-                     
-                     <!-- Admin Stock Table --><div class="table-wrapper"><table class="stock-table">
-                        <thead><tr><th>Warna</th><th>Size</th><th>Varian</th><th>Lengan</th><th>Gramasi</th>
-                        <th>Model</th><th>Jenis Bahan</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody id="adminStockBody">
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-                        
-                        <!-- Modal for Adding Stock -->
-                         <div id="addStockModal" class="modal">
-                            <div class="modal-content">
-                                <span class="close-modal" onclick="closeModal()">&times;</span><div class="modal-header">Tambah Stok</div><div class="compact-form"><select id="warna">
-                                    <option value="HITAM SUPERSOFT">HITAM SUPERSOFT</option>
-                                    <option value="HITAM REAKTIF">HITAM REAKTIF</option>
-                                    <option value="HITAM SULFUR">HITAM SULFUR</option>
-                                    <option value="PUTIH BERSIH">PUTIH BERSIH</option>
-                                    <option value="PUTIH NATURAL">PUTIH NATURAL</option>
-                                    <option value="ARMY GREEN">ARMY GREEN</option>
-                                    <option value="HIJAU TNI">HIJAU TNI</option>
-                                    <option value="TOSCA TUA">TOSCA TUA</option>
-                                    <option value="BIRU TOSCA">BIRU TOSCA</option>
-                                    <option value="TOSCA">TOSCA</option>
-                                    <option value="TOSCA MUDA">TOSCA MUDA</option>
-                                    <option value="HIJAU MINT">HIJAU MINT</option>
-                                    <option value="HIJAU BOTOL">HIJAU BOTOL</option>
-                                    <option value="MINERAL GREEN">MINERAL GREEN</option>
-                                    <option value="OLIVE GREEN">OLIVE GREEN</option>
-                                    <option value="SAGE GREEN">SAGE GREEN</option>
-                                    <option value="HIJAU FUJI">HIJAU FUJI</option>
-                                    <option value="HIJAU PUCUK">HIJAU PUCUK</option>
-                                    <option value="ELECTRIC LIME">ELECTRIC LIME</option>
-                                    <option value="COKLAT KOPI">COKLAT KOPI</option>
-                                    <option value="COKLAT SUSU">COKLAT SUSU</option>
-                                    <option value="BEIGE">BEIGE</option>
-                                    <option value="KREM">KREM</option>
-                                    <option value="BENHUR">BENHUR</option>
-                                    <option value="TURKIS TUA">TURKIS TUA</option>
-                                    <option value="TURKIS">TURKIS</option>
-                                    <option value="TURKIS MUDA">TURKIS MUDA</option>
-                                    <option value="NAVY BLUE">NAVY BLUE</option>
-                                    <option value="ABU MISTY">ABU MISTY</option>
-                                    <option value="ABU TUA">ABU TUA</option>
-                                    <option value="ABU SEDANG">ABU SEDANG</option>
-                                    <option value="ABU MUDA">ABU MUDA</option>
-                                    <option value="STEEL BLUE">STEEL BLUE</option>
-                                    <option value="DUSTY BLUE">DUSTY BLUE</option>
-                                    <option value="DENIM BLUE BLUE">DENIM BLUE</option>
-                                    <option value="SKY BLUE">SKY BLUE</option>
-                                    <option value="BIRU MUDA">BIRU MUDA</option>
-                                    <option value="UNGU TUA">UNGU TUA</option>
-                                    <option value="LAVENDER">LAVENDER</option>
-                                    <option value="LILAC">LILAC</option>
-                                    <option value="PINK FANTA">PINK FANTA</option>
-                                    <option value="MERAH CABE">MERAH CABE</option>
-                                    <option value="MERAH MARUN">MERAH MARUN</option>
-                                    <option value="BURGUNDY">BURGUNDY</option>
-                                    <option value="DUSTY ROSE">DUSTY ROSE</option>
-                                    <option value="DUSTY PINK">DUSTY PINK</option>
-                                    <option value="SALMON">SALMON</option>
-                                    <option value="DUSTY PEACH">DUSTY PEACH</option>
-                                    <option value="PINK">PINK</option>
-                                    <option value="MAGENTA">MAGENTA</option>
-                                    <option value="ORANGE BATA">ORANGE BATA</option>
-                                    <option value="ORANGE">ORANGE</option>
-                                    <option value="TOFFEE">TOFFEE</option>
-                                    <option value="ALMOND BROWN">ALMOND BROWN</option>
-                                    <option value="DARK MUSTARD">DARK MUSTARD</option>
-                                    <option value="MUSTARD">MUSTARD</option>
-                                    <option value="KUNING BUSUK">KUNING BUSUK</option>
-                                    <option value="KUNING EMAS">KUNING EMAS</option>
-                                    <option value="KUNING LEMON">KUNING LEMON</option>
-                                    <option value="KUNING KENARI">KUNING KENARI</option>
-                                    </select> <select id="size">
-                                        <option value="XS">XS</option>
-                                        <option value="S">S</option>
-                                        <option value="M">M</option>
-                                        <option value="L">L</option>
-                                        <option value="XL">XL</option>
-                                        <option value="2XL">2XL</option>
-                                        <option value="3XL">3XL</option>
-                                        <option value="4XL">4XL</option>
-                                        <option value="5XL">5XL</option>
-                                        <option value="6XL">6XL</option>
+                <!-- Modal for Adding Stock -->
+                 <div id="addStockModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal" onclick="closeModal()">&times;</span><div class="modal-header">Tambah Stok</div><div class="compact-form"><select id="warna">
+                            <option value="HITAM SUPERSOFT">HITAM SUPERSOFT</option>
+                            <option value="HITAM REAKTIF">HITAM REAKTIF</option>
+                            <option value="HITAM SULFUR">HITAM SULFUR</option>
+                            <option value="PUTIH BERSIH">PUTIH BERSIH</option>
+                            <option value="PUTIH NATURAL">PUTIH NATURAL</option>
+                            <option value="ARMY GREEN">ARMY GREEN</option>
+                            <option value="HIJAU TNI">HIJAU TNI</option>
+                            <option value="TOSCA TUA">TOSCA TUA</option>
+                            <option value="BIRU TOSCA">BIRU TOSCA</option>
+                            <option value="TOSCA">TOSCA</option>
+                            <option value="TOSCA MUDA">TOSCA MUDA</option>
+                            <option value="HIJAU MINT">HIJAU MINT</option>
+                            <option value="HIJAU BOTOL">HIJAU BOTOL</option>
+                            <option value="MINERAL GREEN">MINERAL GREEN</option>
+                            <option value="OLIVE GREEN">OLIVE GREEN</option>
+                            <option value="SAGE GREEN">SAGE GREEN</option>
+                            <option value="HIJAU FUJI">HIJAU FUJI</option>
+                            <option value="HIJAU PUCUK">HIJAU PUCUK</option>
+                            <option value="ELECTRIC LIME">ELECTRIC LIME</option>
+                            <option value="COKLAT KOPI">COKLAT KOPI</option>
+                            <option value="COKLAT SUSU">COKLAT SUSU</option>
+                            <option value="BEIGE">BEIGE</option>
+                            <option value="KREM">KREM</option>
+                            <option value="BENHUR">BENHUR</option>
+                            <option value="TURKIS TUA">TURKIS TUA</option>
+                            <option value="TURKIS">TURKIS</option>
+                            <option value="TURKIS MUDA">TURKIS MUDA</option>
+                            <option value="NAVY BLUE">NAVY BLUE</option>
+                            <option value="ABU MISTY">ABU MISTY</option>
+                            <option value="ABU TUA">ABU TUA</option>
+                            <option value="ABU SEDANG">ABU SEDANG</option>
+                            <option value="ABU MUDA">ABU MUDA</option>
+                            <option value="STEEL BLUE">STEEL BLUE</option>
+                            <option value="DUSTY BLUE">DUSTY BLUE</option>
+                            <option value="DENIM BLUE BLUE">DENIM BLUE</option>
+                            <option value="SKY BLUE">SKY BLUE</option>
+                            <option value="BIRU MUDA">BIRU MUDA</option>
+                            <option value="UNGU TUA">UNGU TUA</option>
+                            <option value="LAVENDER">LAVENDER</option>
+                            <option value="LILAC">LILAC</option>
+                            <option value="PINK FANTA">PINK FANTA</option>
+                            <option value="MERAH CABE">MERAH CABE</option>
+                            <option value="MERAH MARUN">MERAH MARUN</option>
+                            <option value="BURGUNDY">BURGUNDY</option>
+                            <option value="DUSTY ROSE">DUSTY ROSE</option>
+                            <option value="DUSTY PINK">DUSTY PINK</option>
+                            <option value="SALMON">SALMON</option>
+                            <option value="DUSTY PEACH">DUSTY PEACH</option>
+                            <option value="PINK">PINK</option>
+                            <option value="MAGENTA">MAGENTA</option>
+                            <option value="ORANGE BATA">ORANGE BATA</option>
+                            <option value="ORANGE">ORANGE</option>
+                            <option value="TOFFEE">TOFFEE</option>
+                            <option value="ALMOND BROWN">ALMOND BROWN</option>
+                            <option value="DARK MUSTARD">DARK MUSTARD</option>
+                            <option value="MUSTARD">MUSTARD</option>
+                            <option value="KUNING BUSUK">KUNING BUSUK</option>
+                            <option value="KUNING EMAS">KUNING EMAS</option>
+                            <option value="KUNING LEMON">KUNING LEMON</option>
+                            <option value="KUNING KENARI">KUNING KENARI</option>
+                            </select> <select id="size">
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="2XL">2XL</option>
+                                <option value="3XL">3XL</option>
+                                <option value="4XL">4XL</option>
+                                <option value="5XL">5XL</option>
+                                <option value="6XL">6XL</option>
+                                
+                                </select> <select id="varian">
+                                    <option value="DEWASA">Dewasa</option>
+                                    <option value="ANAK">Anak</option>
+                                    
+                                    </select> <select id="lengan">
+                                        <option value="PENDEK">Pendek</option>
+                                        <option value="PANJANG">Panjang</option>
+                                        <option value="PANJANG RIB">Panjang Rib</option>
                                         
-                                        </select> <select id="varian">
-                                            <option value="DEWASA">Dewasa</option>
-                                            <option value="ANAK">Anak</option>
-                                            
-                                            </select> <select id="lengan">
-                                                <option value="PENDEK">Pendek</option>
-                                                <option value="PANJANG">Panjang</option>
-                                                <option value="PANJANG RIB">Panjang Rib</option>
+                                        </select> <select id="gramasi">
+                                            <option value="30S">30S</option>
+                                            <option value="24S">24S</option>
+                                            <option value="20S">20S</option>
+                                            <option value="16S">16S</option>
+                                           
+                                        </select> <select id="model">
+                                                <option value="OBLONG">Oblong</option>
+                                                <option value="V-NECK">V-Neck</option>
+                                                <option value="KERAH">Kerah</option>
+                                                <option value="RAGLAN">Raglan</option>
+                                                <option value="SINGLET">Singlet</option>
                                                 
-                                                </select> <select id="gramasi">
-                                                    <option value="30S">30S</option>
-                                                    <option value="24S">24S</option>
-                                                    <option value="20S">20S</option>
-                                                    <option value="16S">16S</option>
-                                                   
-                                                </select> <select id="model">
-                                                        <option value="OBLONG">Oblong</option>
-                                                        <option value="V-NECK">V-Neck</option>
-                                                        <option value="KERAH">Kerah</option>
-                                                        <option value="RAGLAN">Raglan</option>
-                                                        <option value="SINGLET">Singlet</option>
-                                                        
-                                                </select> <select id="jenisBahan">
-                                                    <option value="COMBED">Combed</option>
-                                                    <option value="CARDED">Carded</option>
-                                                    <option value="PE">PE</option>
-                                                    <option value="TC">TC</option>
-                                                    <option value="LACOS">Lacos</option>
-                                                    
-                                                </select> <input type="number" id="jumlah" placeholder="Jumlah">
-                                                </div><div class="modal-footer"><button onclick="closeModal()" class="btn">Batal</button> <button onclick="addStock()" class="btn btn-primary">Simpan</button></div></div></div><!-- Login Modal --><div id="loginModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeLoginModal()">&times;</span><div class="modal-header">Login</div><div class="login-form"><input type="text" id="username" placeholder="Username" value="admin"> <input type="password" id="password" placeholder="Password"> <button onclick="login()" class="btn btn-primary">Login</button></div></div></div><script>let isAdmin = false;
-    let allStocks = [];
-
-    // Fungsi Buka Login Modal
-    function openLoginModal() {
-        document.getElementById('loginModal').style.display = 'flex';
-    }
-
-    // Fungsi Tutup Login Modal
-    function closeLoginModal() {
-        document.getElementById('loginModal').style.display = 'none';
-    }
-
-    // Fungsi Login
-    function login() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        if (username === 'admin' && password === 'knvs1234') {
-            isAdmin = true;
-            document.getElementById('loginButton').classList.add('hidden');
-            document.querySelector('.container:not(#adminContent)').classList.add('hidden');
-            document.getElementById('adminContent').classList.remove('hidden');
-            loadStocks();
-            closeLoginModal();
-        } else {
-            alert('Login gagal!');
-        }
-    }
-
-    // Fungsi Buka Modal
-    function openModal() {
-        document.getElementById('addStockModal').style.display = 'flex';
-    }
-
-    // Fungsi Tutup Modal
-    function closeModal() {
-        document.getElementById('addStockModal').style.display = 'none';
-    }
-
-    // Fungsi Tambah Stok
-    async function addStock() {
-            const stockData = {
-                warna: document.getElementById('warna').value,
-                size: document.getElementById('size').value,
-                varian: document.getElementById('varian').value,
-                lengan: document.getElementById('lengan').value,
-                gramasi: document.getElementById('gramasi').value,
-                model: document.getElementById('model').value,
-                jenisBahan: document.getElementById('jenisBahan').value,
-                jumlah: parseInt(document.getElementById('jumlah').value)
-            };
-
-            try {
-                // Cek apakah stok dengan kriteria yang sama sudah ada
-                const querySnapshot = await db.collection('stocks')
-                    .where('warna', '==', stockData.warna)
-                    .where('size', '==', stockData.size)
-                    .where('varian', '==', stockData.varian)
-                    .where('lengan', '==', stockData.lengan)
-                    .where('gramasi', '==', stockData.gramasi)
-                    .where('model', '==', stockData.model)
-                    .where('jenisBahan', '==', stockData.jenisBahan)
-                    .get();
-
-                if (!querySnapshot.empty) {
-                    // Jika stok sudah ada, update jumlah stok
-                    const doc = querySnapshot.docs[0];
-                    const existingQty = doc.data().jumlah;
-                    await db.collection('stocks').doc(doc.id).update({
-                        jumlah: existingQty + stockData.jumlah
-                    });
-                } else {
-                    // Jika stok belum ada, tambahkan stok baru
-                    await db.collection('stocks').add(stockData);
-                }
-
-                document.getElementById('jumlah').value = '';
-                closeModal();
-            } catch (error) {
-                console.error("Error adding/updating document: ", error);
-            }
-        }
-
-    // Fungsi Muat Stok
-    function loadStocks() {
-        db.collection('stocks').onSnapshot((snapshot) => {
-            allStocks = [];
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                data.id = doc.id;
-                allStocks.push(data);
-            });
-
-            displayStocks(allStocks);
-        });
-    }
-
-    // Fungsi Tampilkan Stok
-    function displayStocks(stocks) {
-        const publicBody = document.getElementById('publicStockBody');
-        const adminBody = document.getElementById('adminStockBody');
-        
-        publicBody.innerHTML = '';
-        adminBody.innerHTML = '';
-
-        // Urutkan stok berdasarkan jumlah terbanyak
-        stocks.sort((a, b) => b.jumlah - a.jumlah);
-
-        // Kelompokkan stok berdasarkan warna
-        const groupedStocks = {};
-        stocks.forEach(stock => {
-            if (!groupedStocks[stock.warna]) {
-                groupedStocks[stock.warna] = [];
-            }
-            groupedStocks[stock.warna].push(stock);
-        });
-
-        // Tampilkan stok untuk publik
-        for (const warna in groupedStocks) {
-            const group = groupedStocks[warna];
-            group.forEach(stock => {
-                const publicRow = publicBody.insertRow();
-                publicRow.innerHTML = `
-                    <td>${stock.warna}</td>
-                    <td>${stock.size}</td>
-                    <td>${stock.varian}</td>
-                    <td>${stock.lengan}</td>
-                    <td>${stock.gramasi}</td>
-                    <td>${stock.model}</td>
-                    <td>${stock.jenisBahan}</td>
-                    <td class="${stock.jumlah < 10 ? 'low-stock' : ''}">${stock.jumlah}</td>
-                `;
-            });
-        }
-
-        // Tampilkan stok untuk admin
-        if(isAdmin) {
-            stocks.forEach(stock => {
-                const adminRow = adminBody.insertRow();
-                adminRow.innerHTML = `
-                    <td>${stock.warna}</td>
-                    <td>${stock.size}</td>
-                    <td>${stock.varian}</td>
-                    <td>${stock.lengan}</td>
-                    <td>${stock.gramasi}</td>
-                    <td>${stock.model}</td>
-                    <td>${stock.jenisBahan}</td>
-                    <td class="${stock.jumlah < 10 ? 'low-stock' : ''}">${stock.jumlah}</td>
-                    <td>
-                        <button class="btn btn-primary" 
-                            onclick="editStock('${stock.id}', ${stock.jumlah})">
-                            Edit
-                        </button>
-                    </td>
-                `;
-            });
-        }
-    }
-
-    // Fungsi Cari Stok
-    function searchStock() {
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        const filteredStocks = allStocks.filter(stock => stock.warna.toLowerCase().includes(searchTerm));
-        displayStocks(filteredStocks);
-    }
-
-    // Fungsi Edit Stok
-    async function editStock(docId, currentQty) {
-        const newQty = prompt('Masukkan jumlah baru:', currentQty);
-        if(newQty !== null) {
-            try {
-                if(parseInt(newQty) === 0) {
-                    await db.collection('stocks').doc(docId).delete();
-                } else {
-                    await db.collection('stocks').doc(docId).update({
-                        jumlah: parseInt(newQty)
-                    });
-                }
-            } catch (error) {
-                console.error("Error updating document: ", error);
-            }
-        }
-    }
-
-    // Muat stok awal
-    loadStocks();</script></body></html>
+                                        </select> <select id="jenisBahan">
+                                            <option value="COMBED">Combed</option>
+                                            <option value="CARDED">Carded</option>
+                                            <option value="PE">PE</option>
+                                            <option value="TC">TC</option>
+                                            <option value="LACOS">Lacos</option>
+                                            
+                                        </select> <input type="number" id="jumlah" placeholder="Jumlah">
+                                        </div><div class="modal-footer"><button onclick="closeModal()" class="btn">Batal</button> <button onclick="addStock()" class="btn btn-primary">Simpan</button></div></div></div><!-- Login Modal --><div id="loginModal" class="modal"><div class="modal-content"><span class="close-modal" onclick="closeLoginModal()">&times;</span><div class="modal-header">Login</div><div class="login-form"><input type="text" id="username" placeholder="Username" value="admin"> <input type="password" id="password" placeholder="Password"> <button onclick="login()" class="btn btn-primary">Login</button></div></div></div>
+                                        
+                                        <script>
+                                            let isAdmin = false;
+                                            let allStocks = [];
+                                    
+                                            // Fungsi Buka Login Modal
+                                            function openLoginModal() {
+                                                document.getElementById('loginModal').style.display = 'flex';
+                                            }
+                                    
+                                            // Fungsi Tutup Login Modal
+                                            function closeLoginModal() {
+                                                document.getElementById('loginModal').style.display = 'none';
+                                            }
+                                    
+                                            // Fungsi Login
+                                            function login() {
+                                                const username = document.getElementById('username').value;
+                                                const password = document.getElementById('password').value;
+                                    
+                                                if (username === 'admin' && password === 'knvs1234') {
+                                                    isAdmin = true;
+                                                    document.getElementById('loginButton').classList.add('hidden');
+                                                    document.querySelector('.container:not(#adminContent)').classList.add('hidden');
+                                                    document.getElementById('adminContent').classList.remove('hidden');
+                                                    loadStocks();
+                                                    closeLoginModal();
+                                                } else {
+                                                    alert('Login gagal!');
+                                                }
+                                            }
+                                    
+                                            // Fungsi Buka Modal
+                                            function openModal() {
+                                                document.getElementById('addStockModal').style.display = 'flex';
+                                            }
+                                    
+                                            // Fungsi Tutup Modal
+                                            function closeModal() {
+                                                document.getElementById('addStockModal').style.display = 'none';
+                                            }
+                                    
+                                            // Fungsi Tambah Stok
+                                            async function addStock() {
+                                                const stockData = {
+                                                    warna: document.getElementById('warna').value,
+                                                    size: document.getElementById('size').value,
+                                                    varian: document.getElementById('varian').value,
+                                                    lengan: document.getElementById('lengan').value,
+                                                    gramasi: document.getElementById('gramasi').value,
+                                                    model: document.getElementById('model').value,
+                                                    jenisBahan: document.getElementById('jenisBahan').value,
+                                                    jumlah: parseInt(document.getElementById('jumlah').value)
+                                                };
+                                    
+                                                try {
+                                                    // Cek apakah stok dengan kriteria yang sama sudah ada
+                                                    const querySnapshot = await db.collection('stocks')
+                                                        .where('warna', '==', stockData.warna)
+                                                        .where('size', '==', stockData.size)
+                                                        .where('varian', '==', stockData.varian)
+                                                        .where('lengan', '==', stockData.lengan)
+                                                        .where('gramasi', '==', stockData.gramasi)
+                                                        .where('model', '==', stockData.model)
+                                                        .where('jenisBahan', '==', stockData.jenisBahan)
+                                                        .get();
+                                    
+                                                    if (!querySnapshot.empty) {
+                                                        // Jika stok sudah ada, update jumlah stok
+                                                        const doc = querySnapshot.docs[0];
+                                                        const existingQty = doc.data().jumlah;
+                                                        await db.collection('stocks').doc(doc.id).update({
+                                                            jumlah: existingQty + stockData.jumlah
+                                                        });
+                                                    } else {
+                                                        // Jika stok belum ada, tambahkan stok baru
+                                                        await db.collection('stocks').add(stockData);
+                                                    }
+                                    
+                                                    document.getElementById('jumlah').value = '';
+                                                    closeModal();
+                                                } catch (error) {
+                                                    console.error("Error adding/updating document: ", error);
+                                                }
+                                            }
+                                    
+                                            // Fungsi Muat Stok
+                                            function loadStocks() {
+                                                db.collection('stocks').onSnapshot((snapshot) => {
+                                                    allStocks = [];
+                                                    snapshot.forEach(doc => {
+                                                        const data = doc.data();
+                                                        data.id = doc.id;
+                                                        allStocks.push(data);
+                                                    });
+                                    
+                                                    displayStocks(allStocks);
+                                                    updateSummary(allStocks);
+                                                });
+                                            }
+                                    
+                                            // Fungsi Tampilkan Stok
+                                            function displayStocks(stocks) {
+                                                const publicBody = document.getElementById('publicStockBody');
+                                                const adminBody = document.getElementById('adminStockBody');
+                                                
+                                                publicBody.innerHTML = '';
+                                                adminBody.innerHTML = '';
+                                    
+                                                // Urutkan stok berdasarkan jumlah terbanyak
+                                                stocks.sort((a, b) => b.jumlah - a.jumlah);
+                                    
+                                                // Kelompokkan stok berdasarkan warna
+                                                const groupedStocks = {};
+                                                stocks.forEach(stock => {
+                                                    if (!groupedStocks[stock.warna]) {
+                                                        groupedStocks[stock.warna] = [];
+                                                    }
+                                                    groupedStocks[stock.warna].push(stock);
+                                                });
+                                    
+                                                // Tampilkan stok untuk publik
+                                                for (const warna in groupedStocks) {
+                                                    const group = groupedStocks[warna];
+                                                    group.forEach(stock => {
+                                                        const publicRow = publicBody.insertRow();
+                                                        publicRow.innerHTML = `
+                                                            <td>${stock.warna}</td>
+                                                            <td>${stock.size}</td>
+                                                            <td>${stock.varian}</td>
+                                                            <td>${stock.lengan}</td>
+                                                            <td>${stock.gramasi}</td>
+                                                            <td>${stock.model}</td>
+                                                            <td>${stock.jenisBahan}</td>
+                                                            <td class="${stock.jumlah < 10 ? 'low-stock' : ''}">${stock.jumlah}</td>
+                                                        `;
+                                                    });
+                                                }
+                                    
+                                                // Tampilkan stok untuk admin
+                                                if(isAdmin) {
+                                                    stocks.forEach(stock => {
+                                                        const adminRow = adminBody.insertRow();
+                                                        adminRow.innerHTML = `
+                                                            <td>${stock.warna}</td>
+                                                            <td>${stock.size}</td>
+                                                            <td>${stock.varian}</td>
+                                                            <td>${stock.lengan}</td>
+                                                            <td>${stock.gramasi}</td>
+                                                            <td>${stock.model}</td>
+                                                            <td>${stock.jenisBahan}</td>
+                                                            <td class="${stock.jumlah < 10 ? 'low-stock' : ''}">${stock.jumlah}</td>
+                                                            <td>
+                                                                <button class="btn btn-primary" 
+                                                                    onclick="editStock('${stock.id}', ${stock.jumlah})"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                                            </td>
+                                                        `;
+                                                    });
+                                                }
+                                            }
+                                    
+                                            // Fungsi Update Ringkasan
+                                            function updateSummary(stocks) {
+                                                let totalStock = 0;
+                                                let adultStock = 0;
+                                                let childStock = 0;
+                                                let shortSleeveStock = 0;
+                                                let longSleeveStock = 0;
+                                                let stock30s = 0;
+                                                let stock24s = 0;
+                                    
+                                                stocks.forEach(stock => {
+                                                    totalStock += stock.jumlah;
+                                                    if (stock.varian === 'DEWASA') adultStock += stock.jumlah;
+                                                    if (stock.varian === 'ANAK') childStock += stock.jumlah;
+                                                    if (stock.lengan === 'PENDEK') shortSleeveStock += stock.jumlah;
+                                                    if (stock.lengan === 'PANJANG' || stock.lengan === 'PANJANG RIB') longSleeveStock += stock.jumlah;
+                                                    if (stock.gramasi === '30S') stock30s += stock.jumlah;
+                                                    if (stock.gramasi === '24S') stock24s += stock.jumlah;
+                                                });
+                                    
+                                                document.getElementById('totalStock').textContent = totalStock;
+                                                document.getElementById('adultStock').textContent = adultStock;
+                                                document.getElementById('childStock').textContent = childStock;
+                                                document.getElementById('shortSleeveStock').textContent = shortSleeveStock;
+                                                document.getElementById('longSleeveStock').textContent = longSleeveStock;
+                                                document.getElementById('stock30s').textContent = stock30s;
+                                                document.getElementById('stock24s').textContent = stock24s;
+                                            }
+                                    
+                                            // Fungsi Cari Stok
+                                            function searchStock() {
+                                                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                                                const filteredStocks = allStocks.filter(stock => stock.warna.toLowerCase().includes(searchTerm));
+                                                displayStocks(filteredStocks);
+                                            }
+                                    
+                                            // Fungsi Edit Stok
+                                            async function editStock(docId, currentQty) {
+                                                const newQty = prompt('Masukkan jumlah baru:', currentQty);
+                                                if(newQty !== null) {
+                                                    try {
+                                                        if(parseInt(newQty) === 0) {
+                                                            await db.collection('stocks').doc(docId).delete();
+                                                        } else {
+                                                            await db.collection('stocks').doc(docId).update({
+                                                                jumlah: parseInt(newQty)
+                                                            });
+                                                        }
+                                                    } catch (error) {
+                                                        console.error("Error updating document: ", error);
+                                                    }
+                                                }
+                                            }
+                                    
+                                            // Fungsi Kembali ke Halaman Publik
+                                            function backToPublic() {
+                                                isAdmin = false;
+                                                document.getElementById('loginButton').classList.remove('hidden');
+                                                document.querySelector('.container:not(#adminContent)').classList.remove('hidden');
+                                                document.getElementById('adminContent').classList.add('hidden');
+                                            }
+                                    
+                                            // Muat stok awal
+                                            loadStocks();
+                                        </script>
+                                    </body>
+                                    </html>
