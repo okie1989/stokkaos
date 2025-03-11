@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -9,335 +10,342 @@
 <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script>
 <style>
-:root {
-    --primary: #7ddb91;
-    --secondary: #3e884a;
-    --light: #1f8171;
-    --dark: #1a1a1a;
-    --background: #f4f4f4;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    background-color: var(--background);
-    color: var(--dark);
-}
-/* Header */
-.header {
-    background-color: var(--primary);
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    box-shadow: var(--shadow);
-    z-index: 1000;
-    animation: slideDown 0.5s ease-out;
-}
-@keyframes slideDown {
-    from {
-        transform: translateY(-100%);
+    :root {
+        --primary: #7ddb91;
+        --secondary: #3e884a;
+        --light: #1f8171;
+        --dark: #1a1a1a;
+        --background: #f4f4f4;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    to {
-        transform: translateY(0);
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        background-color: var(--background);
+        color: var(--dark);
     }
-}
-.logo {
-    height: 50px;
-    margin-right: 15px;
-    transition: transform 0.3s ease;
-}
-.logo:hover {
-    transform: scale(1.1);
-}
-.header-title {
-    color: var(--dark);
-    font-size: 24px;
-    font-weight: bold;
-}
-/* Login Button */
-.login-button {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    background-color: var(--secondary);
-    color: white;
-    cursor: pointer;
-    z-index: 1001;
-    font-size: 14px;
-    transition: background-color 0.3s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.login-button:hover {
-    background-color: var(--light);
-    transform: translateY(-2px);
-}
-.login-button i {
-    font-size: 16px;
-}
-/* Main Container */
-.container {
-    max-width: 1200px;
-    margin: 100px auto 20px;
-    padding: 20px;
-    animation: fadeIn 1s ease-in;
-}
-@keyframes fadeIn {
-    from {
-        opacity: 0;
+    /* Header */
+    .header {
+        background-color: var(--primary);
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        animation: slideDown 0.5s ease-out;
     }
-    to {
-        opacity: 1;
+    @keyframes slideDown {
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(0);
+        }
     }
-}
-/* Search Container */
-.search-container {
-    margin-bottom: 20px;
-    display: flex;
-    gap: 10px;
-}
-.search-container input {
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    flex: 1;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-.search-container input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 5px rgba(125, 219, 145, 0.5);
-}
-.search-container button {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: var(--secondary);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.search-container button:hover {
-    background-color: var(--light);
-    transform: translateY(-2px);
-}
-/* Table Style */
-.table-wrapper {
-    overflow-x: auto;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    background: white;
-    padding: 10px;
-}
-.stock-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-}
-.stock-table th,
-.stock-table td {
-    text-align: center;
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-    transition: background-color 0.3s;
-}
-.stock-table th {
-    background-color: var(--primary);
-    color: white;
-    font-weight: bold;
-}
-.stock-table tr:hover {
-    background-color: rgba(125, 219, 145, 0.1);
-}
-.btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.btn-primary {
-    background-color: var(--secondary);
-    color: white;
-}
-.btn-primary:hover {
-    background-color: var(--light);
-    transform: translateY(-2px);
-}
-.hidden {
-    display: none;
-}
-.low-stock {
-    color: #e74c3c;
-    font-weight: bold;
-}
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1001;
-    animation: fadeIn 0.3s ease-in;
-}
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: var(--shadow);
-    animation: slideUp 0.3s ease-out;
-}
-@keyframes slideUp {
-    from {
-        transform: translateY(20px);
-        opacity: 0;
+    .logo {
+        height: 50px;
+        margin-right: 15px;
+        transition: transform 0.3s ease;
     }
-    to {
-        transform: translateY(0);
-        opacity: 1;
+    .logo:hover {
+        transform: scale(1.1);
     }
-}
-.modal-header {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-.close-modal {
-    cursor: pointer;
-    color: #aaa;
-    font-size: 24px;
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    transition: color 0.3s;
-}
-.close-modal:hover {
-    color: var(--dark);
-}
-/* Summary Table */
-.summary-container {
-    margin-bottom: 20px;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-}
-.summary-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-.summary-table th,
-.summary-table td {
-    padding: 12px;
-    text-align: center;
-    border-bottom: 1px solid #ddd;
-}
-.summary-table th {
-    background-color: var(--primary);
-    color: white;
-    font-weight: bold;
-}
-.summary-table tr:hover {
-    background-color: rgba(125, 219, 145, 0.1);
-}
-/* Responsive Styles */
-@media (max-width: 768px) {
     .header-title {
-        font-size: 20px;
+        color: var(--dark);
+        font-size: 24px;
+        font-weight: bold;
     }
+    /* Login Button */
     .login-button {
-        top: 15px;
-        right: 15px;
-        padding: 6px 12px;
-        font-size: 12px;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        z-index: 1001;
+        font-size: 14px;
+        transition: background-color 0.3s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
+    .login-button:hover {
+        background-color: var(--light);
+        transform: translateY(-2px);
+    }
+    .login-button i {
+        font-size: 16px;
+    }
+    /* Main Container */
     .container {
-        margin-top: 80px;
-        padding: 10px;
+        max-width: 1200px;
+        margin: 100px auto 20px;
+        padding: 20px;
+        animation: fadeIn 1s ease-in;
     }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    /* Search Container */
     .search-container {
-        flex-direction: column;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+    }
+    .search-container input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        flex: 1;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .search-container input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 5px rgba(125, 219, 145, 0.5);
     }
     .search-container button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .search-container button:hover {
+        background-color: var(--light);
+        transform: translateY(-2px);
+    }
+    /* Table Style */
+    .table-wrapper {
+        overflow-x: auto;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        background: white;
+        padding: 10px;
+    }
+    .stock-table {
         width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
     }
     .stock-table th,
     .stock-table td {
-        padding: 8px;
-        font-size: 14px;
+        text-align: center;
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        transition: background-color 0.3s;
+    }
+    .stock-table th {
+        background-color: var(--primary);
+        color: white;
+        font-weight: bold;
+    }
+    .stock-table tr:hover {
+        background-color: rgba(125, 219, 145, 0.1);
     }
     .btn {
-        padding: 4px 8px;
-        font-size: 14px;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
-}
-@media (max-width: 390px) {
-    .header-title {
-        font-size: 18px;
+    .btn-primary {
+        background-color: var(--secondary);
+        color: white;
     }
-    .logo {
-        height: 40px;
+    .btn-primary:hover {
+        background-color: var(--light);
+        transform: translateY(-2px);
     }
-    .login-button {
-        top: 10px;
-        right: 10px;
-        padding: 5px 10px;
-        font-size: 12px;
+    .hidden {
+        display: none;
+    }
+    .low-stock {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+        animation: fadeIn 0.3s ease-in;
     }
     .modal-content {
-        width: 95%;
-        padding: 15px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: var(--shadow);
+        animation: slideUp 0.3s ease-out;
+    }
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
     .modal-header {
-        font-size: 18px;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
     }
-    .modal-footer button {
-        padding: 6px 10px;
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
     }
-}
-.highlight {
-    background-color: #ffeb3b;
+    .close-modal {
+        cursor: pointer;
+        color: #aaa;
+        font-size: 24px;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        transition: color 0.3s;
+    }
+    .close-modal:hover {
+        color: var(--dark);
+    }
+    /* Summary Table */
+    .summary-container {
+        margin-bottom: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+    }
+    .summary-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .summary-table th,
+    .summary-table td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+    .summary-table th {
+        background-color: var(--primary);
+        color: white;
+        font-weight: bold;
+    }
+    .summary-table tr:hover {
+        background-color: rgba(125, 219, 145, 0.1);
+    }
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+        .header-title {
+            font-size: 20px;
+        }
+        .login-button {
+            top: 15px;
+            right: 15px;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .container {
+            margin-top: 80px;
+            padding: 10px;
+        }
+        .search-container {
+            flex-direction: column;
+        }
+        .search-container button {
+            width: 100%;
+        }
+        .stock-table th,
+        .stock-table td {
+            padding: 8px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 4px 8px;
+            font-size: 14px;
+        }
+    }
+    @media (max-width: 390px) {
+        .header-title {
+            font-size: 18px;
+        }
+        .logo {
+            height: 40px;
+        }
+        .login-button {
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        .modal-content {
+            width: 95%;
+            padding: 15px;
+        }
+        .modal-header {
+            font-size: 18px;
+        }
+        .modal-footer button {
+            padding: 6px 10px;
+        }
+    }
+    .highlight {
+        background-color: #ffeb3b;
+        font-weight: bold;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+    /* Pesan Tidak Ada Hasil */
+    .no-result {
+        text-align: center;
+        color: #e74c3c;
+        font-weight: bold;
+        padding: 20px;
+    }
+    .highlight {
+    background-color: #ffeb3b; /* Warna kuning untuk highlight */
     font-weight: bold;
     padding: 2px 4px;
     border-radius: 3px;
 }
-/* Pesan Tidak Ada Hasil */
-.no-result {
-    text-align: center;
-    color: #e74c3c;
-    font-weight: bold;
-    padding: 20px;
-}
 </style>
 <!-- Firebase Config -->
-<script>const firebaseConfig = {
+<script>
+const firebaseConfig = {
     apiKey: "AIzaSyAmSWqMZ4Nrc4905V8EEB83oJs0IB0EATQ",
     authDomain: "stok-kaos.firebaseapp.com",
     databaseURL: "https://stok-kaos-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -347,7 +355,8 @@ body {
     appId: "1:423425283384:web:a6bb4aafa22a6daaac1dcd"
 };
 const app = firebase.initializeApp(firebaseConfig);
-db = firebase.firestore(app);</script>
+db = firebase.firestore(app);
+</script>
 </head>
 <body>
 <!-- Header -->
@@ -383,6 +392,11 @@ db = firebase.firestore(app);</script>
 </div>
 <!-- Admin Content -->
 <div class="container hidden" id="adminContent">
+	<!-- Search Container for Admin -->
+	<div class="search-container">
+		<input type="text" id="adminSearchInput" placeholder="Cari berdasarkan warna, size, varian, lengan, dll...">
+		<button onclick="searchAdminStock()" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+	</div>
 	<!-- Button to Open Modal -->
 	<button onclick="openModal()" class="btn btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
 	<!-- Back Button -->
@@ -561,198 +575,101 @@ db = firebase.firestore(app);</script>
 	</div>
 </div>
 <script>
-                                            let isAdmin = false;
-                                            let allStocks = [];
-                                            // Fungsi Buka Login Modal
-                                            function openLoginModal() {
-                                                document.getElementById('loginModal').style.display = 'flex';
-                                            }
-                                            // Fungsi Tutup Login Modal
-                                            function closeLoginModal() {
-                                                document.getElementById('loginModal').style.display = 'none';
-                                            }
-                                            // Fungsi Login
-                                            function login() {
-                                                const username = document.getElementById('username').value;
-                                                const password = document.getElementById('password').value;
-                                                if (username === 'admin' && password === 'knvs1234') {
-                                                    isAdmin = true;
-                                                    document.getElementById('loginButton').classList.add('hidden');
-                                                    document.querySelector('.container:not(#adminContent)').classList.add('hidden');
-                                                    document.getElementById('adminContent').classList.remove('hidden');
-                                                    loadStocks();
-                                                    closeLoginModal();
-                                                } else {
-                                                    alert('Login gagal!');
-                                                }
-                                            }
-                                            // Fungsi Buka Modal
-                                            function openModal() {
-                                                document.getElementById('addStockModal').style.display = 'flex';
-                                            }
-                                            // Fungsi Tutup Modal
-                                            function closeModal() {
-                                                document.getElementById('addStockModal').style.display = 'none';
-                                            }
-                                            // Fungsi Tambah Stok
-                                            async function addStock() {
-                                                const stockData = {
-                                                    warna: document.getElementById('warna').value,
-                                                    size: document.getElementById('size').value,
-                                                    varian: document.getElementById('varian').value,
-                                                    lengan: document.getElementById('lengan').value,
-                                                    gramasi: document.getElementById('gramasi').value,
-                                                    model: document.getElementById('model').value,
-                                                    jenisBahan: document.getElementById('jenisBahan').value,
-                                                    jumlah: parseInt(document.getElementById('jumlah').value)
-                                                };
-                                                try {
-                                                    // Cek apakah stok dengan kriteria yang sama sudah ada
-                                                    const querySnapshot = await db.collection('stocks')
-                                                        .where('warna', '==', stockData.warna)
-                                                        .where('size', '==', stockData.size)
-                                                        .where('varian', '==', stockData.varian)
-                                                        .where('lengan', '==', stockData.lengan)
-                                                        .where('gramasi', '==', stockData.gramasi)
-                                                        .where('model', '==', stockData.model)
-                                                        .where('jenisBahan', '==', stockData.jenisBahan)
-                                                        .get();
-                                                    if (!querySnapshot.empty) {
-                                                        // Jika stok sudah ada, update jumlah stok
-                                                        const doc = querySnapshot.docs[0];
-                                                        const existingQty = doc.data().jumlah;
-                                                        await db.collection('stocks').doc(doc.id).update({
-                                                            jumlah: existingQty + stockData.jumlah
-                                                        });
-                                                    } else {
-                                                        // Jika stok belum ada, tambahkan stok baru
-                                                        await db.collection('stocks').add(stockData);
-                                                    }
-                                                    document.getElementById('jumlah').value = '';
-                                                    closeModal();
-                                                } catch (error) {
-                                                    console.error("Error adding/updating document: ", error);
-                                                }
-                                            }
-                                            // Fungsi Muat Stok
-                                            function loadStocks() {
-                                                db.collection('stocks').onSnapshot((snapshot) => {
-                                                    allStocks = [];
-                                                    snapshot.forEach(doc => {
-                                                        const data = doc.data();
-                                                        data.id = doc.id;
-                                                        allStocks.push(data);
-                                                    });
-                                                    displayStocks(allStocks);
-                                                    updateSummary(allStocks);
-                                                });
-                                            }
-                                            // Fungsi Tampilkan Stok
-                                            function displayStocks(stocks) {
-                                                const publicBody = document.getElementById('publicStockBody');
-                                                const adminBody = document.getElementById('adminStockBody');
-                                                publicBody.innerHTML = '';
-                                                adminBody.innerHTML = '';
-                                                // Urutkan stok berdasarkan jumlah terbanyak
-                                                stocks.sort((a, b) => b.jumlah - a.jumlah);
-                                                // Kelompokkan stok berdasarkan warna
-                                                const groupedStocks = {};
-                                                stocks.forEach(stock => {
-                                                    if (!groupedStocks[stock.warna]) {
-                                                        groupedStocks[stock.warna] = [];
-                                                    }
-                                                    groupedStocks[stock.warna].push(stock);
-                                                });
-                                                // Tampilkan stok untuk publik
-                                                for (const warna in groupedStocks) {
-                                                    const group = groupedStocks[warna];
-                                                    group.forEach(stock => {
-                                                        const publicRow = publicBody.insertRow();
-                                                        publicRow.innerHTML = `
-                                                            <td>${stock.warna}</td>
-                                                            <td>${stock.size}</td>
-                                                            <td>${stock.varian}</td>
-                                                            <td>${stock.lengan}</td>
-                                                            <td>${stock.gramasi}</td>
-                                                            <td>${stock.model}</td>
-                                                            <td>${stock.jenisBahan}</td>
-                                                            <td class="${stock.jumlah < 10 ? 'low-stock' : ''}">${stock.jumlah}</td>
-                                                        `;
-                                                    });
-                                                }
-                                                // Tampilkan stok untuk admin
-                                                if(isAdmin) {
-                                                    stocks.forEach(stock => {
-                                                        const adminRow = adminBody.insertRow();
-                                                        adminRow.innerHTML = `
-                                                            <td>${stock.warna}</td>
-                                                            <td>${stock.size}</td>
-                                                            <td>${stock.varian}</td>
-                                                            <td>${stock.lengan}</td>
-                                                            <td>${stock.gramasi}</td>
-                                                            <td>${stock.model}</td>
-                                                            <td>${stock.jenisBahan}</td>
-                                                            <td class="${stock.jumlah < 10 ? 'low-stock' : ''}">${stock.jumlah}</td>
-                                                            <td>
-                                                                <button class="btn btn-primary" 
-                                                                    onclick="editStock('${stock.id}', ${stock.jumlah})"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                                            </td>
-                                                        `;
-                                                    });
-                                                }
-                                            }
-                                            // Fungsi Update Ringkasan
-                                            function updateSummary(stocks) {
-                                                let totalStock = 0;
-                                                let adultStock = 0;
-                                                let childStock = 0;
-                                                let shortSleeveStock = 0;
-                                                let longSleeveStock = 0;
-                                                let stock30s = 0;
-                                                let stock24s = 0;
-                                                stocks.forEach(stock => {
-                                                    totalStock += stock.jumlah;
-                                                    if (stock.varian === 'DEWASA') adultStock += stock.jumlah;
-                                                    if (stock.varian === 'ANAK') childStock += stock.jumlah;
-                                                    if (stock.lengan === 'PENDEK') shortSleeveStock += stock.jumlah;
-                                                    if (stock.lengan === 'PANJANG' || stock.lengan === 'PANJANG RIB') longSleeveStock += stock.jumlah;
-                                                    if (stock.gramasi === '30S') stock30s += stock.jumlah;
-                                                    if (stock.gramasi === '24S') stock24s += stock.jumlah;
-                                                });
-                                                document.getElementById('totalStock').textContent = totalStock;
-                                                document.getElementById('adultStock').textContent = adultStock;
-                                                document.getElementById('childStock').textContent = childStock;
-                                                document.getElementById('shortSleeveStock').textContent = shortSleeveStock;
-                                                document.getElementById('longSleeveStock').textContent = longSleeveStock;
-                                                document.getElementById('stock30s').textContent = stock30s;
-                                                document.getElementById('stock24s').textContent = stock24s;
-                                            }
-                                            // Fungsi Cari Stok (Real-Time)
-function searchStock() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    const filteredStocks = allStocks.filter(stock => {
-        return (
-            stock.warna.toLowerCase().includes(searchTerm) ||
-            stock.size.toLowerCase().includes(searchTerm) ||
-            stock.varian.toLowerCase().includes(searchTerm) ||
-            stock.lengan.toLowerCase().includes(searchTerm) ||
-            stock.gramasi.toLowerCase().includes(searchTerm) ||
-            stock.model.toLowerCase().includes(searchTerm) ||
-            stock.jenisBahan.toLowerCase().includes(searchTerm)
-        );
-    });
-    if (filteredStocks.length === 0) {
-        // Tampilkan pesan jika tidak ada hasil
-        document.getElementById('publicStockBody').innerHTML = `
-            <tr>
-                <td colspan="8" class="no-result">Tidak ada hasil yang ditemukan untuk "${searchTerm}"</td>
-            </tr>
-        `;
+let isAdmin = false;
+let allStocks = [];
+
+// Fungsi Buka Login Modal
+function openLoginModal() {
+    document.getElementById('loginModal').style.display = 'flex';
+}
+
+// Fungsi Tutup Login Modal
+function closeLoginModal() {
+    document.getElementById('loginModal').style.display = 'none';
+}
+
+// Fungsi Login
+function login() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    if (username === 'admin' && password === 'knvs1234') {
+        isAdmin = true;
+        document.getElementById('loginButton').classList.add('hidden');
+        document.querySelector('.container:not(#adminContent)').classList.add('hidden');
+        document.getElementById('adminContent').classList.remove('hidden');
+        loadStocks();
+        closeLoginModal();
     } else {
-        displayStocks(filteredStocks, searchTerm); // Sertakan searchTerm untuk highlight
+        alert('Login gagal!');
     }
 }
-// Fungsi Tampilkan Stok dengan Highlight
+
+// Fungsi Buka Modal
+function openModal() {
+    document.getElementById('addStockModal').style.display = 'flex';
+}
+
+// Fungsi Tutup Modal
+function closeModal() {
+    document.getElementById('addStockModal').style.display = 'none';
+}
+
+// Fungsi Tambah Stok
+async function addStock() {
+    const stockData = {
+        warna: document.getElementById('warna').value,
+        size: document.getElementById('size').value,
+        varian: document.getElementById('varian').value,
+        lengan: document.getElementById('lengan').value,
+        gramasi: document.getElementById('gramasi').value,
+        model: document.getElementById('model').value,
+        jenisBahan: document.getElementById('jenisBahan').value,
+        jumlah: parseInt(document.getElementById('jumlah').value)
+    };
+    try {
+        // Cek apakah stok dengan kriteria yang sama sudah ada
+        const querySnapshot = await db.collection('stocks')
+            .where('warna', '==', stockData.warna)
+            .where('size', '==', stockData.size)
+            .where('varian', '==', stockData.varian)
+            .where('lengan', '==', stockData.lengan)
+            .where('gramasi', '==', stockData.gramasi)
+            .where('model', '==', stockData.model)
+            .where('jenisBahan', '==', stockData.jenisBahan)
+            .get();
+        if (!querySnapshot.empty) {
+            // Jika stok sudah ada, update jumlah stok
+            const doc = querySnapshot.docs[0];
+            const existingQty = doc.data().jumlah;
+            await db.collection('stocks').doc(doc.id).update({
+                jumlah: existingQty + stockData.jumlah
+            });
+        } else {
+            // Jika stok belum ada, tambahkan stok baru
+            await db.collection('stocks').add(stockData);
+        }
+        document.getElementById('jumlah').value = '';
+        closeModal();
+    } catch (error) {
+        console.error("Error adding/updating document: ", error);
+    }
+}
+
+// Fungsi Muat Stok
+function loadStocks() {
+    db.collection('stocks').onSnapshot((snapshot) => {
+        allStocks = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            data.id = doc.id;
+            allStocks.push(data);
+        });
+        displayStocks(allStocks);
+        updateSummary(allStocks);
+    });
+}
+
+// Fungsi Tampilkan Stok
 function displayStocks(stocks, searchTerm = '') {
     const publicBody = document.getElementById('publicStockBody');
     const adminBody = document.getElementById('adminStockBody');
@@ -807,40 +724,126 @@ function displayStocks(stocks, searchTerm = '') {
         });
     }
 }
+
 // Fungsi Highlight Text
 function highlightText(text, searchTerm) {
     if (!searchTerm) return text;
     const regex = new RegExp(`(${searchTerm})`, 'gi');
     return text.replace(regex, '<span class="highlight">$1</span>');
 }
-// Event Listener untuk Pencarian Real-Time
+
+// Fungsi Cari Stok di Halaman Publik
+function searchStock() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const filteredStocks = allStocks.filter(stock => {
+        return (
+            stock.warna.toLowerCase().includes(searchTerm) ||
+            stock.size.toLowerCase().includes(searchTerm) ||
+            stock.varian.toLowerCase().includes(searchTerm) ||
+            stock.lengan.toLowerCase().includes(searchTerm) ||
+            stock.gramasi.toLowerCase().includes(searchTerm) ||
+            stock.model.toLowerCase().includes(searchTerm) ||
+            stock.jenisBahan.toLowerCase().includes(searchTerm)
+        );
+    });
+    if (filteredStocks.length === 0) {
+        // Tampilkan pesan jika tidak ada hasil
+        document.getElementById('publicStockBody').innerHTML = `
+            <tr>
+                <td colspan="8" class="no-result">Tidak ada hasil yang ditemukan untuk "${searchTerm}"</td>
+            </tr>
+        `;
+    } else {
+        displayStocks(filteredStocks, searchTerm); // Sertakan searchTerm untuk highlight
+    }
+}
+
+// Fungsi Cari Stok di Admin
+function searchAdminStock() {
+    const searchTerm = document.getElementById('adminSearchInput').value.toLowerCase();
+    const filteredStocks = allStocks.filter(stock => {
+        return (
+            stock.warna.toLowerCase().includes(searchTerm) ||
+            stock.size.toLowerCase().includes(searchTerm) ||
+            stock.varian.toLowerCase().includes(searchTerm) ||
+            stock.lengan.toLowerCase().includes(searchTerm) ||
+            stock.gramasi.toLowerCase().includes(searchTerm) ||
+            stock.model.toLowerCase().includes(searchTerm) ||
+            stock.jenisBahan.toLowerCase().includes(searchTerm)
+        );
+    });
+    if (filteredStocks.length === 0) {
+        // Tampilkan pesan jika tidak ada hasil
+        document.getElementById('adminStockBody').innerHTML = `
+            <tr>
+                <td colspan="9" class="no-result">Tidak ada hasil yang ditemukan untuk "${searchTerm}"</td>
+            </tr>
+        `;
+    } else {
+        displayStocks(filteredStocks, searchTerm); // Sertakan searchTerm untuk highlight
+    }
+}
+
+// Event Listener untuk Pencarian Real-Time di Halaman Publik
 document.getElementById('searchInput').addEventListener('input', searchStock);
-                                            // Fungsi Edit Stok
-                                            async function editStock(docId, currentQty) {
-                                                const newQty = prompt('Masukkan jumlah baru:', currentQty);
-                                                if(newQty !== null) {
-                                                    try {
-                                                        if(parseInt(newQty) === 0) {
-                                                            await db.collection('stocks').doc(docId).delete();
-                                                        } else {
-                                                            await db.collection('stocks').doc(docId).update({
-                                                                jumlah: parseInt(newQty)
-                                                            });
-                                                        }
-                                                    } catch (error) {
-                                                        console.error("Error updating document: ", error);
-                                                    }
-                                                }
+
+// Event Listener untuk Pencarian Real-Time di Admin
+document.getElementById('adminSearchInput').addEventListener('input', searchAdminStock);
+
+// Fungsi Edit Stok
+async function editStock(docId, currentQty) {
+    const newQty = prompt('Masukkan jumlah baru:', currentQty);
+    if(newQty !== null) {
+        try {
+            if(parseInt(newQty) === 0) {
+                await db.collection('stocks').doc(docId).delete();
+            } else {
+                await db.collection('stocks').doc(docId).update({
+                    jumlah: parseInt(newQty)
+                });
+            }
+        } catch (error) {
+            console.error("Error updating document: ", error);
+        }
+    }
+}
+// Fungsi Update Ringkasan
+function updateSummary(stocks) {
+                                                let totalStock = 0;
+                                                let adultStock = 0;
+                                                let childStock = 0;
+                                                let shortSleeveStock = 0;
+                                                let longSleeveStock = 0;
+                                                let stock30s = 0;
+                                                let stock24s = 0;
+                                                stocks.forEach(stock => {
+                                                    totalStock += stock.jumlah;
+                                                    if (stock.varian === 'DEWASA') adultStock += stock.jumlah;
+                                                    if (stock.varian === 'ANAK') childStock += stock.jumlah;
+                                                    if (stock.lengan === 'PENDEK') shortSleeveStock += stock.jumlah;
+                                                    if (stock.lengan === 'PANJANG' || stock.lengan === 'PANJANG RIB') longSleeveStock += stock.jumlah;
+                                                    if (stock.gramasi === '30S') stock30s += stock.jumlah;
+                                                    if (stock.gramasi === '24S') stock24s += stock.jumlah;
+                                                });
+                                                document.getElementById('totalStock').textContent = totalStock;
+                                                document.getElementById('adultStock').textContent = adultStock;
+                                                document.getElementById('childStock').textContent = childStock;
+                                                document.getElementById('shortSleeveStock').textContent = shortSleeveStock;
+                                                document.getElementById('longSleeveStock').textContent = longSleeveStock;
+                                                document.getElementById('stock30s').textContent = stock30s;
+                                                document.getElementById('stock24s').textContent = stock24s;
                                             }
-                                            // Fungsi Kembali ke Halaman Publik
-                                            function backToPublic() {
-                                                isAdmin = false;
-                                                document.getElementById('loginButton').classList.remove('hidden');
-                                                document.querySelector('.container:not(#adminContent)').classList.remove('hidden');
-                                                document.getElementById('adminContent').classList.add('hidden');
-                                            }
-                                            // Muat stok awal
-                                            loadStocks();
-                                        </script>
+
+// Fungsi Kembali ke Halaman Publik
+function backToPublic() {
+    isAdmin = false;
+    document.getElementById('loginButton').classList.remove('hidden');
+    document.querySelector('.container:not(#adminContent)').classList.remove('hidden');
+    document.getElementById('adminContent').classList.add('hidden');
+}
+
+// Muat stok awal
+loadStocks();
+</script>
 </body>
 </html>
