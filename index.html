@@ -6,20 +6,27 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>STOK KAOS KANVAS MERCH</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Tambahkan font Exo dari Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Exo:400,700&display=swap" rel="stylesheet">
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore-compat.js"></script>
 <style>
     :root {
-        --primary: #7ddb91;
+        --primary: #222e3c;
         --secondary: #3e884a;
-        --light: #1f8171;
-        --dark: #1a1a1a;
-        --background: #f4f4f4;
-        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --light: #2e3c4d;
+        --dark: #f4f4f4;
+        --background: #181c23;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+        --card-bg: #232b36;
+        --modal-bg: #232b36;
+        --input-bg: #232b36;
+        --input-border: #3e884a;
+        --highlight: #ffe066;
     }
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Exo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         margin: 0;
         background-color: var(--background);
         color: var(--dark);
@@ -57,6 +64,7 @@
         color: var(--dark);
         font-size: 24px;
         font-weight: bold;
+        font-family: 'Exo', sans-serif;
     }
     /* Login Button */
     .login-button {
@@ -67,7 +75,7 @@
         border: none;
         border-radius: 4px;
         background-color: var(--secondary);
-        color: white;
+        color: var(--dark);
         cursor: pointer;
         z-index: 1001;
         font-size: 14px;
@@ -75,6 +83,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        font-family: 'Exo', sans-serif;
     }
     .login-button:hover {
         background-color: var(--light);
@@ -89,6 +98,8 @@
         margin: 100px auto 20px;
         padding: 20px;
         animation: fadeIn 1s ease-in;
+        background-color: transparent;
+        color: var(--dark);
     }
     @keyframes fadeIn {
         from {
@@ -107,25 +118,29 @@
     .search-container input {
         padding: 8px;
         border-radius: 4px;
-        border: 1px solid #ccc;
+        border: 1px solid var(--input-border);
+        background: var(--input-bg);
+        color: var(--dark);
         flex: 1;
         transition: border-color 0.3s, box-shadow 0.3s;
+        font-family: 'Exo', sans-serif;
     }
     .search-container input:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 5px rgba(125, 219, 145, 0.5);
+        border-color: var(--secondary);
+        box-shadow: 0 0 5px rgba(62, 136, 74, 0.5);
     }
     .search-container button {
         padding: 8px 12px;
         border: none;
         border-radius: 4px;
         background-color: var(--secondary);
-        color: white;
+        color: var(--dark);
         cursor: pointer;
         transition: background-color 0.3s, transform 0.2s;
         display: flex;
         align-items: center;
         gap: 8px;
+        font-family: 'Exo', sans-serif;
     }
     .search-container button:hover {
         background-color: var(--light);
@@ -136,30 +151,32 @@
         overflow-x: auto;
         border-radius: 8px;
         box-shadow: var(--shadow);
-        background: white;
+        background: var(--card-bg);
         padding: 10px;
     }
     .stock-table {
         width: 100%;
         border-collapse: collapse;
-        background: white;
+        background: var(--card-bg);
         border-radius: 8px;
         overflow: hidden;
+        color: var(--dark);
+        font-family: 'Exo', sans-serif;
     }
     .stock-table th,
     .stock-table td {
         text-align: center;
         padding: 12px;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #333;
         transition: background-color 0.3s;
     }
     .stock-table th {
-        background-color: var(--primary);
-        color: white;
+        background-color: var(--secondary);
+        color: var(--dark);
         font-weight: bold;
     }
     .stock-table tr:hover {
-        background-color: rgba(125, 219, 145, 0.1);
+        background-color: rgba(62, 136, 74, 0.08);
     }
     .btn {
         padding: 6px 12px;
@@ -170,10 +187,11 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        font-family: 'Exo', sans-serif;
     }
     .btn-primary {
         background-color: var(--secondary);
-        color: white;
+        color: var(--dark);
     }
     .btn-primary:hover {
         background-color: var(--light);
@@ -183,7 +201,7 @@
         display: none;
     }
     .low-stock {
-        color: #e74c3c;
+        color: #ff7675;
         font-weight: bold;
     }
     /* Modal Styles */
@@ -194,14 +212,15 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(24, 28, 35, 0.95);
         justify-content: center;
         align-items: center;
         z-index: 1001;
         animation: fadeIn 0.3s ease-in;
     }
     .modal-content {
-        background-color: white;
+        background-color: var(--modal-bg);
+        color: var(--dark);
         padding: 20px;
         border-radius: 8px;
         width: 90%;
@@ -223,6 +242,7 @@
         font-size: 20px;
         font-weight: bold;
         margin-bottom: 20px;
+        font-family: 'Exo', sans-serif;
     }
     .modal-footer {
         display: flex;
@@ -232,7 +252,7 @@
     }
     .close-modal {
         cursor: pointer;
-        color: #aaa;
+        color: #888;
         font-size: 24px;
         position: absolute;
         top: 10px;
@@ -245,28 +265,31 @@
     /* Summary Table */
     .summary-container {
         margin-bottom: 20px;
-        background: white;
+        background: var(--card-bg);
         padding: 20px;
         border-radius: 8px;
         box-shadow: var(--shadow);
+        color: var(--dark);
     }
     .summary-table {
         width: 100%;
         border-collapse: collapse;
+        color: var(--dark);
+        font-family: 'Exo', sans-serif;
     }
     .summary-table th,
     .summary-table td {
         padding: 12px;
         text-align: center;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #333;
     }
     .summary-table th {
-        background-color: var(--primary);
-        color: white;
+        background-color: var(--secondary);
+        color: var(--dark);
         font-weight: bold;
     }
     .summary-table tr:hover {
-        background-color: rgba(125, 219, 145, 0.1);
+        background-color: rgba(62, 136, 74, 0.08);
     }
     /* Responsive Styles */
     @media (max-width: 768px) {
@@ -324,7 +347,8 @@
         }
     }
     .highlight {
-        background-color: #ffeb3b;
+        background-color: var(--highlight);
+        color: #222;
         font-weight: bold;
         padding: 2px 4px;
         border-radius: 3px;
@@ -332,16 +356,10 @@
     /* Pesan Tidak Ada Hasil */
     .no-result {
         text-align: center;
-        color: #e74c3c;
+        color: #ff7675;
         font-weight: bold;
         padding: 20px;
     }
-    .highlight {
-    background-color: #ffeb3b; /* Warna kuning untuk highlight */
-    font-weight: bold;
-    padding: 2px 4px;
-    border-radius: 3px;
-}
 </style>
 <!-- Firebase Config -->
 <script>
@@ -361,7 +379,7 @@ db = firebase.firestore(app);
 <body>
 <!-- Header -->
 <div class="header">
-	<img src="https://i.imgur.com/75tlt7m.png" class="logo" alt="Logo">
+	<img src="https://i.imgur.com/75tlt7m.png" class="logo" alt="Logo" style="filter: grayscale(1) invert(1);">
 	<h1 class="header-title">STOK KAOS KANVAS MERCH</h1>
 </div>
 <!-- Login Button -->
